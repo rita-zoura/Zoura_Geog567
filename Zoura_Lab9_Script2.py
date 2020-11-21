@@ -9,14 +9,17 @@ workspace = input("What is the location of your workspace folder?: ")
 arcpy.env.workspace = workspace
 
 rasters = arcpy.ListRasters()
+band_count = rasters.bandCount
+print(band_count)
 
 for raster in rasters:
     information = arcpy.Describe(raster)
     name = information.name
     height = information.height
     width = information.width
-    file_typee = information.format
-    print(name, width, height, file_typee)
+    file_type = information.format
+    # band_count = information.bandCount
+    print(name, width, height, file_type)
 
 
 
