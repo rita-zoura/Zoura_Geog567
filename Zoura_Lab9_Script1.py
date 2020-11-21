@@ -40,11 +40,14 @@ def DefineProjections(shapefile_list):
         sr = arcpy.Describe(item).spatialReference
         print("\t" + item + ": Spatial Reference unknown, defined projection to: " + sr.name)
 
+
 workspace = GetWorkspace()
 
 feature_classes = GetFeatures(workspace)
 
-DefineProjections(feature_classes)
+feature_classes_count = len(feature_classes)
 
+DefineProjections(feature_classes)
+print("There are " + str(feature_classes_count) + " features in this workspace.")
 print("Script Complete!")
 
