@@ -11,9 +11,12 @@ arcpy.env.workspace = workspace
 rasters = arcpy.ListRasters()
 
 for raster in rasters:
-    info = arcpy.Describe(raster)
-    name = info.name
-    file_type = info.format
+    name = arcpy.Describe(raster).name
+    file_type = arcpy.Describe(raster).format
+    width = arcpy.Describe(raster).width
+
+    print(name, file_type, width)
+
 
 
 
