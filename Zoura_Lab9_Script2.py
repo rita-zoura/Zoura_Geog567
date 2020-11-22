@@ -8,19 +8,24 @@ import arcpy
 workspace = input("What is the location of your workspace folder?: ")
 arcpy.env.workspace = workspace
 
-rasters = arcpy.ListRasters("*", "TIFF")
+rasters = arcpy.ListRasters()
 
 band_count = 0
 
 for raster in rasters:
     information = arcpy.Describe(raster)
-    name = information.name
-    file_type = information.format
-    height = information.height
-    width = information.width
-    has_band = information.bandCount
-    if has_band > 0:
-        band_count += 1
-    print(name, file_type)
+    if information.format == "AFR":
+        rasters.remove(raster)
+    else:
+        name = information.name
+        file_type = information.format
+        height = information.height
+        width = information.width
+        has_band = information.bandCount
+        if has_band > 0:
+            band_count += 1
+    print("File " + name + ":")
+    print("\t file type: " + file_type)
+    print("\t dimensions: " + str(width) + " x " + str(height))
 
-print(band_count)
+print("There are " + str(band_count) + " bands in this folder")
