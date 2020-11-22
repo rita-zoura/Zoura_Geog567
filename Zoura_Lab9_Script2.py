@@ -8,18 +8,19 @@ import arcpy
 workspace = input("What is the location of your workspace folder?: ")
 arcpy.env.workspace = workspace
 
-rasters = arcpy.ListRasters()
-band_count = rasters.bandCount
-print(band_count)
+rasters = arcpy.ListRasters("*", "TIFF")
+
+band_count = 0
 
 for raster in rasters:
     information = arcpy.Describe(raster)
     name = information.name
+    file_type = information.format
     height = information.height
     width = information.width
-    file_type = information.format
-    # band_count = information.bandCount
-    print(name, width, height, file_type)
+    has_band = information.bandCount
+    if has_band > 0:
+        band_count += 1
+    print(name, file_type)
 
-
-
+print(band_count)
