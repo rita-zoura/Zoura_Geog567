@@ -59,9 +59,15 @@ def long_DMS_to_DD(direction, longitudinal_degrees, longitudinal_minutes, longit
     # Prints the output values to the user as a string value
     return long_dd
 
-# def GetStatistics():
+# def GetStatistics(in_file):
 
+#     cursor = arcpy.da.SearchCursor(in_file, "*")
+#     row_count = 0
+#     for row in cursor:
+#         row_count += 1
+        
     # Total number of observations in the feature class.
+    
 
     # Percentage of observations that indicated the species was present.
     # The latitudes and ObservationID values of the northmost and southmost
@@ -70,35 +76,63 @@ def long_DMS_to_DD(direction, longitudinal_degrees, longitudinal_minutes, longit
     # observations
 
 
-csv_table = "E:/GEOG_567/Lab_11/MyProject2/MyProject2.gdb/coords_DD"
+# csv_table = arcpy.GetParameterAsText(0)
 
-fields = ["TxtLatitude", "TxtLongitude", "DDLatitude", "DDLongitude"]
+# fields = ["TxtLatitude", "TxtLongitude", "DDLatitude", "DDLongitude"]
 
-cursor = arcpy.da.UpdateCursor(csv_table, fields)
+# cursor = arcpy.da.UpdateCursor(csv_table, fields)
 
-for row in cursor:
-    latitude = row[0].split("-")
-    lat_direction = latitude[0]
-    lat_deg = latitude[1]
-    lat_min = latitude[2]
-    lat_sec = latitude[3]
+# for row in cursor:
+#     latitude = row[0].split("-")
+#     lat_direction = latitude[0]
+#     lat_deg = latitude[1]
+#     lat_min = latitude[2]
+#     lat_sec = latitude[3]
 
-    lat_DD = lat_DMS_to_DD(lat_direction, lat_deg, lat_min, lat_sec)
+#     lat_DD = lat_DMS_to_DD(lat_direction, lat_deg, lat_min, lat_sec)
     
-    longitude = row[1].split("-")
-    long_direction = longitude[0]
-    long_deg = longitude[1]
-    long_min = longitude[2]
-    long_sec = longitude[3]
+#     longitude = row[1].split("-")
+#     long_direction = longitude[0]
+#     long_deg = longitude[1]
+#     long_min = longitude[2]
+#     long_sec = longitude[3]
 
-    long_DD = long_DMS_to_DD(long_direction, long_deg, long_min, long_sec)
+#     long_DD = long_DMS_to_DD(long_direction, long_deg, long_min, long_sec)
     
-    row[2] = lat_DD
-    row[3] = long_DD
+#     row[2] = lat_DD
+#     row[3] = long_DD
     
-    cursor.updateRow(row)
+#     cursor.updateRow(row)
 
-print("Script Complete!")
-# find out what class not registered means, why is it in the for loop?????
-# annd i give up for tonight
+# del cursor
+
+# arcpy.AddMessage("DMS to DD conversion complete")
+
+file = "E:/GEOG_567/Lab_11/MyProject2/MyProject2.gdb/coords_DD"
+
+stats_fields = ["Year", "ObservationID", "Presence", "DDLatitude", "DDLongitude"]
+
+stats_cursor = arcpy.da.SearchCursor(file, stats_fields)
+
+row_count = 0
+
+presence = 0
+no_presence = 0
+
+north_lat = 0
+south_lat = 0
+
+west_long = 0
+east_long = 0
+
+for row in stats_cursor:
+    row_count += 1
+    
+    if row[2] == 1:
+        presence += 1
+    else:
+        no_presence += 1
+
+presence_percent = (presence / row_count) * 100
+
 
