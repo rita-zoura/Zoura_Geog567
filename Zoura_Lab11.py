@@ -17,8 +17,6 @@
 
 import arcpy
 
-
-
 def lat_DMS_to_DD(direction, latitudinal_degrees, latitudinal_minutes, latitudinal_seconds):
     # Input the values for the latitudinal degrees, minutes and seconds seperately
     lat_deg = float(latitudinal_degrees)
@@ -71,11 +69,12 @@ def long_DMS_to_DD(direction, longitudinal_degrees, longitudinal_minutes, longit
     # The longitudes and ObservationID values of the westmost and eastmost
     # observations
 
-csv_table = "E:/GEOG_567/Lab_11/coords_DD.dbf"
 
-fields = ["TxtLatitude", "TxtLongitude"]
+csv_table = "E:/GEOG_567/Lab_11/MyProject2/MyProject2.gdb/coords_DD"
 
-cursor = arcpy.da.SearchCursor(csv_table, fields)
+fields = ["TxtLatitude", "TxtLongitude", "DDLatitude", "DDLongitude"]
+
+cursor = arcpy.da.UpdateCursor(csv_table, fields)
 
 for row in cursor:
     latitude = row[0].split("-")
@@ -85,8 +84,7 @@ for row in cursor:
     lat_sec = latitude[3]
 
     lat_DD = lat_DMS_to_DD(lat_direction, lat_deg, lat_min, lat_sec)
-    row
-
+    
     longitude = row[1].split("-")
     long_direction = longitude[0]
     long_deg = longitude[1]
@@ -95,5 +93,12 @@ for row in cursor:
 
     long_DD = long_DMS_to_DD(long_direction, long_deg, long_min, long_sec)
     
-    print(lat_DD, long_DD)
+    row[2] = lat_DD
+    row[3] = long_DD
+    
+    cursor.updateRow(row)
+
+print("Script Complete!")
+# find out what class not registered means, why is it in the for loop?????
+# annd i give up for tonight
 
